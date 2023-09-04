@@ -316,6 +316,23 @@ void LiquidCrystal_I2C::printstr(const char c[]){
 	print(c);
 }
 
+void LiquidCrystal_I2C::printMultiline(uint8_t* text){
+    if(bitRead(text[0], 0)){ // may want to add a check before backlight or nobacklight is called
+		backlight();
+	}
+	else{
+		noBacklight();
+	}
+	char str[_rows][_cols];
+    for(int r = 0; r < _rows; r++){
+      for(int c = 0; c < _cols; c++){
+        str[r][c] = text[r * _cols + _cols + 1]; // offset by 1 for first byte with light data
+      }
+      setCursor(0, r);
+      print(str[r]);
+    }
+  }
+
 
 // unsupported API functions
 #pragma GCC diagnostic push
