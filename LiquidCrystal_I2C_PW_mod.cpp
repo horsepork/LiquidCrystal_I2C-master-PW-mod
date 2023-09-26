@@ -317,21 +317,13 @@ void LiquidCrystal_I2C::printstr(const char c[]){
 }
 
 void LiquidCrystal_I2C::printMultiline(uint8_t* text){
-    if(bitRead(text[0], 0)){ // may want to add a check before backlight or nobacklight is called
-		backlight();
+    setBacklight(text[0]);
+	for(int r = 0; r < _rows; r++){
+		setCursor(0, r);
+		for(int c = 0; c < _cols; c++){
+			print((char)text[r * _cols + c + 1]);
+		}
 	}
-	else{
-		noBacklight();
-	}
-	char str[_rows][_cols];
-    for(int r = 0; r < _rows; r++){
-      setCursor(0, r);
-      for(int c = 0; c < _cols; c++){
-        str[r][c] = text[r * _cols + c + 1]; // offset by 1 for first byte with light data
-	  }
-      setCursor(0, r);
-      print(str[r]);
-    }
   }
 
 
